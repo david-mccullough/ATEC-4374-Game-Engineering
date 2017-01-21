@@ -5,7 +5,6 @@ public class AccelerateChaser : MonoBehaviour {
 	public Transform target;
 	public float speed = .5f;
 	public Vector3 velocity = new Vector3(0f, 0f, 0f);
-	public float acceleration = 1f;
 	public float maximumVelocity = .15f;
 
 	public float offsetLength = 1f;
