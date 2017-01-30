@@ -2,9 +2,10 @@
 
 public class BallBehavior : MonoBehaviour {
 
-	public float gravity = .5f;
+	public float gravity = .25f;
 	public Vector3 velocity = new Vector3(0f, 0f, 0f);
 	public float maximumVelocity = .15f;
+	public float radius = .5f;
 
 	public float tailDuration = 5f;
 	public Color color = Color.cyan;
@@ -13,13 +14,15 @@ public class BallBehavior : MonoBehaviour {
 	{
 		Vector3 selfPosition = transform.position;
 
+
 		//Add gravity to acceleration
 		velocity += Vector3.down * (gravity * Time.deltaTime);
 
 		RaycastHit hit;
-		if (Physics.SphereCast(selfPosition, 1f, velocity, out hit, velocity.magnitude))
+		if (Physics.SphereCast(selfPosition, radius, velocity.normalized, out hit, velocity.magnitude)) 
 		{
-			velocity += Vector3.Reflect (velocity, hit.normal);
+			velocity = Vector3.Reflect (velocity, hit.normal);
+			Debug.Log ("Hit surface");
 		}
 
 		//clamp velocity to maximumVelocity
@@ -30,6 +33,6 @@ public class BallBehavior : MonoBehaviour {
 		transform.position = newPosition;
 
 		//Draw motion trail
-		Debug.DrawRay (selfPosition, Vector3.one, color, tailDuration, true);
+		Debug.DrawRay (selfPosition, -velocity, color, tailDuration, true);
 	}
 }
