@@ -2,12 +2,12 @@
 
 public class BallBehavior : MonoBehaviour {
 
-	public float gravity = .25f;
+	public float gravity = .2f;
 	public Vector3 velocity = new Vector3(0f, 0f, 0f);
 	public float maximumVelocity = .15f;
 	public float radius = .5f;
 
-	public float tailDuration = 5f;
+	public float tailDuration = 10f;
 	public Color color = Color.cyan;
 
 	void Update () 
@@ -19,14 +19,21 @@ public class BallBehavior : MonoBehaviour {
 		//Add gravity to acceleration
 		velocity += Vector3.down * (gravity * Time.deltaTime);
 
-		int collisionCount = 3;
+		int collisionCount = 5;
 		while (collisionCount > 0)
 		{
 			RaycastHit hit;
-			if (Physics.SphereCast (selfPosition, radius, velocity.normalized, out hit, travelDist)) {
-				selfPosition += travelDir * (hit.distance - 0.1f);
-				velocity = Vector3.Reflect (velocity, hit.normal);
-				Debug.Log ("Hit surface");
+			if (Physics.SphereCast (selfPosition, radius, velocity.normalized, out hit, travelDist))
+			{
+				//Check for collision with special colliders
+				if (hit.collider.tag == "Catcher")
+				{
+					hit.transform.SendMessage("CatchBall", this.gameObject);
+					break;
+				}
+
+				selfPosition += travelDir * (hit.distance - 0.000001f);
+				velocity = Vector3.Reflect (velocity*.9f, hit.normal);
 			}
 			else
 			{
