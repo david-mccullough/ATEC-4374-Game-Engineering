@@ -24,6 +24,7 @@ public class PachinkoGame : MonoBehaviour {
 			RaycastHit hit;
 			if (Physics.Raycast(ray, out hit, 10000f))
 			{
+				//If user clicks on spawn zone, spawn a ball
 				if (hit.collider.tag == "SpawnArea" && ballCount > 0)
 				{
 					Debug.Log ("spawn ball");

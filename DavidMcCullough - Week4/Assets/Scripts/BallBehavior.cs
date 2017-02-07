@@ -31,6 +31,15 @@ public class BallBehavior : MonoBehaviour {
 					hit.transform.SendMessage("CatchBall", this.gameObject);
 					break;
 				}
+				if (hit.collider.tag == "Bumper")
+				{
+					velocity *= 2f;
+				}
+				if (hit.collider.tag == "Pickup")
+				{
+					hit.transform.SendMessage("BallGet", this.gameObject);
+					break;
+				}
 
 				selfPosition += travelDir * (hit.distance - 0.000001f);
 				velocity = Vector3.Reflect (velocity*.9f, hit.normal);
