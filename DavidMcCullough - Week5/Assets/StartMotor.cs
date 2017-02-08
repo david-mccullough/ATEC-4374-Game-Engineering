@@ -2,12 +2,12 @@
 
 public class StartMotor : BaseMotor {
 	
-	public override void UpdateMotor(CharacterController mover)
+	public override void UpdateMotor(CharacterMover mover)
 	{
 		Debug.Log("Starting");
 	}
 
-	public override void HandleCollision(CharacterController mover, ControllerColliderHit hit)
+	public override void HandleCollision(CharacterMover mover, ControllerColliderHit hit)
 	{
 	}
 }

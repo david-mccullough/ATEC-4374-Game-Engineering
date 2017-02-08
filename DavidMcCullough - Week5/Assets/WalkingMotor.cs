@@ -2,12 +2,12 @@
 
 public class WalkingMotor : BaseMotor
 {
-	public override void UpdateMotor(CharacterController mover)
+	public override void UpdateMotor(CharacterMover mover)
 	{
 		Debug.Log("Walking");
 	}
 
-	public override void HandleCollision(CharacterController mover, ControllerColliderHit hit)
+	public override void HandleCollision(CharacterMover mover, ControllerColliderHit hit)
 	{
 	}
 }
