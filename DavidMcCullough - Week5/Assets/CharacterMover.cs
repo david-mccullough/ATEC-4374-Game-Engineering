@@ -11,8 +11,9 @@ public enum MovementState
 public class CharacterMover : MonoBehaviour {
 
 	CharacterController charController;
-
-	public Vector3 velocity;
+    public float radius = .5f;
+    public LayerMask collisionMask;
+    public Vector3 velocity;
 
 	MovementState currentState;
 
@@ -25,14 +26,14 @@ public class CharacterMover : MonoBehaviour {
 		charController = GetComponent<CharacterController>();
 	}
 
-	void GetMotors()
+/*	void GetMotors()
 	{
 		BaseMotor[] motors = GetComponents<BaseMotor>();
 		for (int i = 0; i < motors.Length; i++)
 		{
 			
 		}
-	}
+	}*/
 
 	private void Update()
 	{
