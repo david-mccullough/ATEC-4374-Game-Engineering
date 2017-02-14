@@ -10,33 +10,43 @@ public enum MovementState
 [RequireComponent(typeof(CharacterController))]
 public class CharacterMover : MonoBehaviour {
 
-	CharacterController charController;
+	public CharacterController charController;
     public float radius = .5f;
     public LayerMask collisionMask;
     public Vector3 velocity;
+	public float jumpSpeed = 1f;
 
-	MovementState currentState;
+	public MovementState currentState;
 
 	public BaseMotor startMotor;
 	public BaseMotor walkingMotor;
 	public BaseMotor fallingMotor;
 
+	public float moveSpeed;
+	public bool wInput;
+	public bool aInput;
+	public bool sInput;
+	public bool dInput;
+	public bool jInput;
+
 	private void Awake()
 	{
 		charController = GetComponent<CharacterController>();
+		currentState = MovementState.start;
 	}
 
-/*	void GetMotors()
+	void GetInput()
 	{
-		BaseMotor[] motors = GetComponents<BaseMotor>();
-		for (int i = 0; i < motors.Length; i++)
-		{
-			
-		}
-	}*/
+		wInput = Input.GetKey ("w");
+		aInput = Input.GetKey ("a");
+		sInput = Input.GetKey ("s");
+		dInput = Input.GetKey ("d");
+		jInput = Input.GetKeyDown ("space");
+	}
 
 	private void Update()
 	{
+		GetInput ();
 		switch(currentState)
 		{
 			case MovementState.start:
@@ -52,7 +62,7 @@ public class CharacterMover : MonoBehaviour {
 		}
 	}
 
-	private void OnCharacterColliderHit(ControllerColliderHit hit)
+	void OnControllerColliderHit(ControllerColliderHit hit)
 	{
 		switch(currentState)
 		{
