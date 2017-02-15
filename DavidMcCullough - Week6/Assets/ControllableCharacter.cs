@@ -1,7 +1,9 @@
-﻿using UnityEngine;
+﻿using System.Collections.Generic;
+using UnityEngine;
 
 public class ControllableCharacter : MonoBehaviour {
 
+	Queue<BaseCommand> commandQueue = new Queue<BaseCommand>();
 	BaseCommand currentCommand;
 
 	public float moveSpeed = 2f;
@@ -13,16 +15,17 @@ public class ControllableCharacter : MonoBehaviour {
 
 	public void AddCommand(BaseCommand newCommand)
 	{
-		currentCommand = newCommand;
+		commandQueue.Enqueue(newCommand);
 	}
 
 	void ExecuteCommands()
 	{
-		//Do I have a command?
-		if (currentCommand != null)
+		if (commandQueue.Count != 0)
 		{
-			if (currentCommand.Execute(this))
-				currentCommand = null;
+		//Do I have a command?
+		BaseCommand currentCommand = commandQueue.Peek();
+		if (currentCommand.Execute(this))
+			commandQueue.Dequeue();
 		}
 	}
 
