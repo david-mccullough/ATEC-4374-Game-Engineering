@@ -11,6 +11,7 @@ public class MoveCommand : BaseCommand {
 
 	public override bool Execute(ControllableCharacter character)
 	{
-		return character.MoveToLocation(targetLocation);
+		Vector3 offset = new Vector3 (targetLocation.x, 1f, targetLocation.z);
+		return character.MoveToLocation(offset);
 	}
 }

@@ -3,10 +3,11 @@ using UnityEngine;
 
 public class ControllableCharacter : MonoBehaviour {
 
-	Queue<BaseCommand> commandQueue = new Queue<BaseCommand>();
+	public Queue<BaseCommand> commandQueue = new Queue<BaseCommand>();
 	BaseCommand currentCommand;
 
 	public float moveSpeed = 2f;
+	public int itemCount = 0;
 
 	void Update()
 	{
@@ -45,7 +46,13 @@ public class ControllableCharacter : MonoBehaviour {
 		else
 		{
 			transform.position += moveDelta.normalized * moveSpeed *Time.deltaTime;
-				return false;
+			return false;
 		}
+	}
+	//*********************************
+
+	public void ClearCommands()
+	{
+		commandQueue.Clear ();
 	}
 }
