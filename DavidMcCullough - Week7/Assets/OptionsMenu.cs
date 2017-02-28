@@ -21,13 +21,13 @@ public class OptionsMenu : MonoBehaviour {
 
 	public void ConfirmPressed()
 	{
-		NotificationCenter.Default.PostNotification("SaveIsWindowed", isWindowed.isOn);
-		NotificationCenter.Default.PostNotification("SaveIsInverted", isInverted.isOn);
+		NotificationCenter.Default.PostNotification("SaveWindowed", isWindowed.isOn);
+		NotificationCenter.Default.PostNotification("SaveInverted", isInverted.isOn);
 		NotificationCenter.Default.PostNotification("SaveResolution", resolution.value);
 		NotificationCenter.Default.PostNotification("SaveSensitvity", mouseSensitivity.value);
-		NotificationCenter.Default.PostNotification("SaveVolMaster", volumeMaster.value);
-		NotificationCenter.Default.PostNotification("SaveVolGame", volumeGame.value);
-		NotificationCenter.Default.PostNotification("SaveVolMusic", volumeMusic.value);
+		NotificationCenter.Default.PostNotification("SaveVolumeMaster", volumeMaster.value);
+		NotificationCenter.Default.PostNotification("SaveVolumeGame", volumeGame.value);
+		NotificationCenter.Default.PostNotification("SaveVolumeMusic", volumeMusic.value);
 		ReturnToMainMenu();
 	}
 

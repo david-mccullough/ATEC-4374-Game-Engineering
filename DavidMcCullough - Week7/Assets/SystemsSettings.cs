@@ -56,6 +56,7 @@ public class SystemsSettings : MonoBehaviour {
 	{
 		PlayerPrefs.SetInt("Resolution", (int)value);
 		PlayerPrefs.Save();
+
 	}
 
 	void LoadResolution(object value)
@@ -68,20 +69,19 @@ public class SystemsSettings : MonoBehaviour {
 	{
 		PlayerPrefs.SetFloat("Sensitivity", (float)value);
 		PlayerPrefs.Save();
-		Debug.Log ("SavedMouse");
 	}
 
 	void LoadSensitivity(object value)
 	{
 		float ourSetting = PlayerPrefs.GetFloat("Sensitivity");
 		NotificationCenter.Default.PostNotification("PassSensitivity", ourSetting);
-		Debug.Log ("LoadedMouse");
 	}
 
 	void SaveVolumeMaster(object value)
 	{
 		PlayerPrefs.SetFloat("VolumeMaster", (float)value);
 		PlayerPrefs.Save();
+
 	}
 
 	void LoadVolumeMaster(object value)
@@ -94,12 +94,13 @@ public class SystemsSettings : MonoBehaviour {
 	{
 		PlayerPrefs.SetFloat("VolumeGame", (float)value);
 		PlayerPrefs.Save();
+
 	}
 
 	void LoadVolumeGame(object value)
 	{
 		float ourSetting = PlayerPrefs.GetFloat("VolumeGame");
-		NotificationCenter.Default.PostNotification("PassVolumeGame", ourSetting);
+		NotificationCenter.Default.PostNotification ("PassVolumeGame", ourSetting);
 	}
 
 	void SaveVolumeMusic(object value)
