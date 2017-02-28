@@ -1,10 +1,21 @@
 ﻿using UnityEngine;
+using System;
+using System.Collections;
+using System.Collections.Generic;
 using UnityEngine.UI;
 
 public class OptionsMenu : MonoBehaviour {
 
 	public GameObject mainMenu;
-	public Toggle valueToggle;
+	public Toggle isWindowed;
+	public Toggle isInverted;
+	public Dropdown resolution;
+	public Slider mouseSlider;
+	public Slider volumeMaster;
+	public Slider volumeGame;
+	public Slider volumeMusic;
+
+	Dictionary<string, string> settings = new Dictionary<string, string>();
 
 	public void BackPressed()
 	{
@@ -13,7 +24,7 @@ public class OptionsMenu : MonoBehaviour {
 
 	public void ConfirmPressed()
 	{
-		NotificationCenter.Default.PostNotification("SaveOurVale", valueToggle.isOn);
+		NotificationCenter.Default.PostNotification("SaveSettings", settings);
 		ReturnToMainMenu();
 	}
 
@@ -26,7 +37,7 @@ public class OptionsMenu : MonoBehaviour {
 	void OnEnable()
 	{
 		NotificationCenter.Default.AddObserver("PassSettings", LoadSettings);
-		NotificationCenter.Default.PostNotification("FetchSettings");
+		NotificationCenter.Default.PostNotification("LoadSettings");
 	}
 
 	void onDisable()
@@ -34,8 +45,16 @@ public class OptionsMenu : MonoBehaviour {
 		NotificationCenter.Default.RemoveObserver("PassSettings", LoadSettings);
 	}
 
-	void LoadSettings(object setting)
+	void LoadSettings(object prefs)
 	{
-		valueToggle.isOn = (bool)setting;
+		settings = (Dictionary<string, string>)prefs;
+
+		string value;
+		/*if (settings.TryGetValue ("isWindowed", out value)) {
+			isWindowed.isOn = Convert.ToBoolean(int.Parse (value));
+		}
+		if (settings.TryGetValue ("isInverted", out value)) {
+			isInverted.isOn = Convert.ToBoolean(int.Parse (value));
+		}*/
 	}
 }
