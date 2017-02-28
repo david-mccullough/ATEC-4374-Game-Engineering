@@ -1,45 +1,116 @@
-﻿using System;
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class SystemsSettings : MonoBehaviour {
 
-	Dictionary<string, string> settings;
-
 	private void Awake()
 	{
-		settings = new Dictionary<string, string>();
-		settings.Add ("isWindowed", "0");
-		settings.Add ("isInverted", "0");
-		NotificationCenter.Default.AddObserver("SaveSettings", SaveSettings);
-		NotificationCenter.Default.AddObserver("LoadSettings", LoadSettings);
+		NotificationCenter.Default.AddObserver("SaveWindowed", SaveWindowed);
+		NotificationCenter.Default.AddObserver("GetWindowed", LoadWindowed);
 
+		NotificationCenter.Default.AddObserver("SaveInverted", SaveInverted);
+		NotificationCenter.Default.AddObserver("GetInverted", LoadInverted);
+
+		NotificationCenter.Default.AddObserver("SaveResolution", SaveResolution);
+		NotificationCenter.Default.AddObserver("GetResolution", LoadResolution);
+
+		NotificationCenter.Default.AddObserver("SaveSensitvity", SaveSensitivity);
+		NotificationCenter.Default.AddObserver("GetSensitivity", LoadSensitivity);
+
+		NotificationCenter.Default.AddObserver("SaveVolumeMaster", SaveVolumeMaster);
+		NotificationCenter.Default.AddObserver("GetVolumeMaster", LoadVolumeMaster);
+
+		NotificationCenter.Default.AddObserver("SaveVolumeGame", SaveVolumeGame);
+		NotificationCenter.Default.AddObserver("GetVolumeGame", LoadVolumeGame);
+
+		NotificationCenter.Default.AddObserver("SaveVolumeMusic", SaveVolumeMusic);
+		NotificationCenter.Default.AddObserver("GetVolumeMusic", LoadVolumeMusic);
 	}
 
-	//Normally would be passing around a struct containing all the data (not just one bool)
-	void SaveSettings(object saved)
+	void SaveWindowed(object value)
 	{
-		Debug.Log ("Saved");
-		settings = (Dictionary<string, string>)saved;
-
-		string value;
-		if (settings.TryGetValue ("isWindowed", out value)) {
-			PlayerPrefs.SetInt("isWindowed", int.Parse (value));
-		}
-		if (settings.TryGetValue ("isInverted", out value)) {
-			PlayerPrefs.SetInt("isInverted", int.Parse (value));
-		}
+		PlayerPrefs.SetInt("Windowed",(bool)value ? 1 : 0);
 		PlayerPrefs.Save();
 	}
 
-	void LoadSettings(object loaded)
+	void LoadWindowed(object value)
 	{
-		Debug.Log ("Loaded");
-		settings = (Dictionary<string, string>)loaded;
+		bool ourSetting = PlayerPrefs.GetInt("Value", 1) == 1;
+		NotificationCenter.Default.PostNotification("PassWindowed", ourSetting);
+	}
 
-		//settings["isWindowed"] = Convert.ToString(PlayerPrefs.GetInt("isWindowed", 1) == 1);
-		//settings["isInverted"] = Convert.ToString(PlayerPrefs.GetInt("isInverted", 1) == 1);
-		NotificationCenter.Default.PostNotification("PassSettings", settings);
+	void SaveInverted(object value)
+	{
+		PlayerPrefs.SetInt("Inverted",(bool)value ? 1 : 0);
+		PlayerPrefs.Save();
+	}
+
+	void LoadInverted(object value)
+	{
+		bool ourSetting = PlayerPrefs.GetInt("Inverted", 1) == 1;
+		NotificationCenter.Default.PostNotification("PassInverted", ourSetting);
+	}
+
+	void SaveResolution(object value)
+	{
+		PlayerPrefs.SetInt("Resolution", (int)value);
+		PlayerPrefs.Save();
+	}
+
+	void LoadResolution(object value)
+	{
+		int ourSetting = PlayerPrefs.GetInt("Resolution");
+		NotificationCenter.Default.PostNotification("PassResolution", ourSetting);
+	}
+
+	void SaveSensitivity(object value)
+	{
+		PlayerPrefs.SetFloat("Sensitivity", (float)value);
+		PlayerPrefs.Save();
+		Debug.Log ("SavedMouse");
+	}
+
+	void LoadSensitivity(object value)
+	{
+		float ourSetting = PlayerPrefs.GetFloat("Sensitivity");
+		NotificationCenter.Default.PostNotification("PassSensitivity", ourSetting);
+		Debug.Log ("LoadedMouse");
+	}
+
+	void SaveVolumeMaster(object value)
+	{
+		PlayerPrefs.SetFloat("VolumeMaster", (float)value);
+		PlayerPrefs.Save();
+	}
+
+	void LoadVolumeMaster(object value)
+	{
+		float ourSetting = PlayerPrefs.GetFloat("VolumeMaster");
+		NotificationCenter.Default.PostNotification("PassVolumeMaster", ourSetting);
+	}
+
+	void SaveVolumeGame(object value)
+	{
+		PlayerPrefs.SetFloat("VolumeGame", (float)value);
+		PlayerPrefs.Save();
+	}
+
+	void LoadVolumeGame(object value)
+	{
+		float ourSetting = PlayerPrefs.GetFloat("VolumeGame");
+		NotificationCenter.Default.PostNotification("PassVolumeGame", ourSetting);
+	}
+
+	void SaveVolumeMusic(object value)
+	{
+		PlayerPrefs.SetFloat("VolumeMusic", (float)value);
+		PlayerPrefs.Save();
+	}
+
+	void LoadVolumeMusic(object value)
+	{
+		float ourSetting = PlayerPrefs.GetFloat("VolumeMusic");
+		NotificationCenter.Default.PostNotification("PassVolumeMusic", ourSetting);
 	}
 }

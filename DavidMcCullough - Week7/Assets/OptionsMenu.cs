@@ -1,7 +1,4 @@
 ﻿using UnityEngine;
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine.UI;
 
 public class OptionsMenu : MonoBehaviour {
@@ -10,12 +7,12 @@ public class OptionsMenu : MonoBehaviour {
 	public Toggle isWindowed;
 	public Toggle isInverted;
 	public Dropdown resolution;
-	public Slider mouseSlider;
+	public Slider mouseSensitivity;
 	public Slider volumeMaster;
 	public Slider volumeGame;
 	public Slider volumeMusic;
 
-	Dictionary<string, string> settings = new Dictionary<string, string>();
+
 
 	public void BackPressed()
 	{
@@ -24,7 +21,13 @@ public class OptionsMenu : MonoBehaviour {
 
 	public void ConfirmPressed()
 	{
-		NotificationCenter.Default.PostNotification("SaveSettings", settings);
+		NotificationCenter.Default.PostNotification("SaveIsWindowed", isWindowed.isOn);
+		NotificationCenter.Default.PostNotification("SaveIsInverted", isInverted.isOn);
+		NotificationCenter.Default.PostNotification("SaveResolution", resolution.value);
+		NotificationCenter.Default.PostNotification("SaveSensitvity", mouseSensitivity.value);
+		NotificationCenter.Default.PostNotification("SaveVolMaster", volumeMaster.value);
+		NotificationCenter.Default.PostNotification("SaveVolGame", volumeGame.value);
+		NotificationCenter.Default.PostNotification("SaveVolMusic", volumeMusic.value);
 		ReturnToMainMenu();
 	}
 
@@ -36,25 +39,71 @@ public class OptionsMenu : MonoBehaviour {
 
 	void OnEnable()
 	{
-		NotificationCenter.Default.AddObserver("PassSettings", LoadSettings);
-		NotificationCenter.Default.PostNotification("LoadSettings");
+		NotificationCenter.Default.AddObserver("PassWindowed", LoadWindowed);
+		NotificationCenter.Default.PostNotification("GetWindowed");
+
+		NotificationCenter.Default.AddObserver("PassInverted", LoadInverted);
+		NotificationCenter.Default.PostNotification("GetInverted");
+
+		NotificationCenter.Default.AddObserver("PassResolution", LoadResolution);
+		NotificationCenter.Default.PostNotification("GetResolution");
+
+		NotificationCenter.Default.AddObserver("PassSensitivity", LoadMouseSensitvity);
+		NotificationCenter.Default.PostNotification("GetSensitivity");
+
+		NotificationCenter.Default.AddObserver("PassVolumeMaster", LoadVolumeMaster);
+		NotificationCenter.Default.PostNotification("GetVolumeMaster");
+
+		NotificationCenter.Default.AddObserver("PassVolumeGame", LoadVolumeGame);
+		NotificationCenter.Default.PostNotification("GetVolumeGame");
+
+		NotificationCenter.Default.AddObserver("PassVolumeMusic", LoadVolumeMusic);
+		NotificationCenter.Default.PostNotification("GetVolumeMusic");
 	}
 
 	void onDisable()
 	{
-		NotificationCenter.Default.RemoveObserver("PassSettings", LoadSettings);
+		NotificationCenter.Default.RemoveObserver("PassWindowed", LoadWindowed);
+		NotificationCenter.Default.RemoveObserver("PassInverted", LoadInverted);
+		NotificationCenter.Default.RemoveObserver("PassResolution", LoadResolution);
+		NotificationCenter.Default.RemoveObserver("PassSensitivity", LoadMouseSensitvity);
+		NotificationCenter.Default.RemoveObserver("PassVolumeMaster", LoadVolumeMaster);
+		NotificationCenter.Default.RemoveObserver("PassVolumeGame", LoadVolumeGame);
+		NotificationCenter.Default.RemoveObserver("PassVolumeMusic", LoadVolumeMusic);
 	}
 
-	void LoadSettings(object prefs)
+	void LoadWindowed(object setting)
 	{
-		settings = (Dictionary<string, string>)prefs;
+		isWindowed.isOn = (bool)setting;
+	}
 
-		string value;
-		/*if (settings.TryGetValue ("isWindowed", out value)) {
-			isWindowed.isOn = Convert.ToBoolean(int.Parse (value));
-		}
-		if (settings.TryGetValue ("isInverted", out value)) {
-			isInverted.isOn = Convert.ToBoolean(int.Parse (value));
-		}*/
+	void LoadInverted(object setting)
+	{
+		isInverted.isOn = (bool)setting;
+	}
+
+	void LoadResolution(object setting)
+	{
+		resolution.value = (int)setting;
+	}
+
+	void LoadMouseSensitvity(object setting)
+	{
+		mouseSensitivity.value = (float)setting;
+	}
+
+	void LoadVolumeMaster(object setting)
+	{
+		volumeMaster.value = (float)setting;
+	}
+
+	void LoadVolumeGame(object setting)
+	{
+		volumeGame.value = (float)setting;
+	}
+
+	void LoadVolumeMusic(object setting)
+	{
+		volumeMusic.value = (float)setting;
 	}
 }
