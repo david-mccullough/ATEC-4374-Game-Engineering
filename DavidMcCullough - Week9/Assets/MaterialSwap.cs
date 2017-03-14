@@ -6,8 +6,9 @@ using UnityEngine;
 public class MaterialSwap : MonoBehaviour {
 
 	public Gradient colorGradient;
-	public float minValue = 0.5f;
-	public float maxValue = 1f;
+	public Material defaultMat;
+	public float minValue = 5f;
+	public float maxValue = 10f;
 	float nextUpdate;
 
 	private void Awake()
@@ -20,11 +21,18 @@ public class MaterialSwap : MonoBehaviour {
 		if (nextUpdate > Time.time)
 			return;
 
-		nextUpdate = Time.time + Mathf.Lerp(minValue, maxValue, 0.5f);
+		nextUpdate = Time.time + Mathf.Lerp(minValue, maxValue, .9f);
 
 		Material mat = GetComponent<Renderer>().material;
-
 		float healthPercent = GetComponent<DestructableBlock>().GetPercentRemaining();
 		mat.color = colorGradient.Evaluate(healthPercent);
+		Debug.Log("Damaged");
+	}
+
+	void OnBlockReset()
+	{
+		Material mat = GetComponent<Renderer>().material;
+		mat.color = defaultMat.color;
+		Debug.Log("Reset");
 	}
 }

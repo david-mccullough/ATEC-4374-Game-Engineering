@@ -3,14 +3,14 @@ using System.Collections;
 
 public class DestructableBlock : MonoBehaviour
 {
-    public int blockHealth = 4;
-    int _currentHealth;
-
-    public void DamageBlock(int damageValue)
+    public float blockHealth = 4f;
+    float currentDamage;
+    
+    public void DamageBlock(float damageValue)
     {
-        _currentHealth += damageValue;
+        currentDamage += damageValue;
         
-        if(_currentHealth >= blockHealth)
+        if(currentDamage >= blockHealth)
         {
             // Block is destroyed, do cool stuff
             SendMessage("OnBlockDestroyed", SendMessageOptions.DontRequireReceiver);
@@ -24,12 +24,19 @@ public class DestructableBlock : MonoBehaviour
 
     public void ResetBlock()
     {
-        _currentHealth = 0;
-        SendMessage("OnBlockDamaged", SendMessageOptions.DontRequireReceiver);
+        currentDamage = 0f;
+        SendMessage("OnBlockReset", SendMessageOptions.DontRequireReceiver);
     }
 
-    public int GetRemainingHealth()
+    // Returns a normalized amount of health.
+    public float GetPercentRemaining()
     {
-        return blockHealth - _currentHealth;
+        return (blockHealth - currentDamage) / blockHealth;
+    }
+
+    // Returns the actual remaining health.
+    public float GetRemainingHealth()
+    {
+        return blockHealth - currentDamage;
     }
 }

@@ -6,9 +6,9 @@ public class BlockDigger : MonoBehaviour
     public Transform playerCamera;
 
     public LayerMask digMask;
-    public float digRate = 0.5f;
+    public float resetDig = 2f;
     public float digRange = 2f;
-    public int digDamage = 1;
+    public float digDamage = 1;
 
     float _lastDigTime;
 
@@ -22,10 +22,10 @@ public class BlockDigger : MonoBehaviour
         {
             TryDig();
         }
-        else 
-        {
+
+        // If you have not used dig in a long time, reset the block you were hitting.
+        if(_lastDigTime + resetDig < Time.time)
             ResetLastHitBlock();
-        }
 	}
 
     void TryDig()
@@ -40,12 +40,9 @@ public class BlockDigger : MonoBehaviour
                 // Same block
                 if (db == _lastBlockHit)
                 {
-                    if(_lastDigTime + digRate < Time.time)
-                    {
-                        _lastDigTime = Time.time;
-                        _lastBlockHit.DamageBlock(digDamage);
-                        SendMessage("OnDigHit", hitInfo, SendMessageOptions.DontRequireReceiver);
-                    }
+                    _lastDigTime = Time.time;
+                    _lastBlockHit.DamageBlock(digDamage * Time.deltaTime);
+                    SendMessage("OnDigHit", hitInfo, SendMessageOptions.DontRequireReceiver);
                 }
                 // Different block
                 else
@@ -54,7 +51,7 @@ public class BlockDigger : MonoBehaviour
 
                     _lastDigTime = Time.time;
                     _lastBlockHit = db;
-                    _lastBlockHit.DamageBlock(digDamage);
+                    _lastBlockHit.DamageBlock(digDamage * Time.deltaTime);
                     SendMessage("OnDigHit", hitInfo, SendMessageOptions.DontRequireReceiver);
                 }
             }
