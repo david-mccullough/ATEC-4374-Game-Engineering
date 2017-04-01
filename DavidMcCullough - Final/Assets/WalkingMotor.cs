@@ -6,31 +6,40 @@ public class WalkingMotor : BaseMotor
 	{
 		float xVel = 0f;
 		float zVel = 0f;
+		int xDir = -mover.kLeft + mover.kRight;
+		int zDir = -mover.kDown + mover.kUp;
+
+		//find actual direction
+		//this will prevernt doubling the player's speed when moving along both axis
+		float direction = Vector2.Angle(new Vector2(1f, 0f), new Vector2((float)xDir, (float)zDir));
+		Debug.Log (direction);
+
 		//Move along x axis
-		if ((mover.aInput && mover.dInput) || (!mover.aInput && !mover.dInput)) {
-			xVel = 0;
-		} else if (mover.aInput) {
-			xVel = mover.moveSpeed;
-		} else {
-			xVel = -mover.moveSpeed;
+		if (xDir != 0) {
+			xVel = -Mathf.Cos (Mathf.Deg2Rad *direction) * mover.moveSpeed;
+			Debug.Log ("xVel: " + xVel);
 		}
 
 		//Move along y axis
-		if ((mover.wInput && mover.sInput) || (!mover.wInput && !mover.sInput)) {
-			zVel = 0;
-		} else if (mover.wInput) {
-			zVel = mover.moveSpeed;
-		} else {
-			zVel = -mover.moveSpeed;
+		if (zDir != 0) {
+			zVel = Mathf.Sin (Mathf.Deg2Rad *direction) * mover.moveSpeed*zDir;
+			Debug.Log ("zVel: " + zVel);
 		}
 			
 		mover.velocity = new Vector3 (zVel, mover.velocity.y, xVel);
 
 		//jumping
-		if (mover.jInput)
+		if (mover.kpJump != 0)
 		{
 			float yVel = mover.jumpSpeed;
 			mover.velocity += new Vector3 (0f, yVel, 0f);
+		}
+		//variable height
+		if (mover.krJump != 0 && mover.velocity.y > 0)
+		{
+			float tempY = mover.velocity.y;
+			Vector3 tempVel = new Vector3 (mover.velocity.x, tempY * 0.25f, mover.velocity.z);
+			mover.velocity = tempVel;
 		}
 
 		mover.charController.Move (mover.velocity);

@@ -6,23 +6,13 @@ public class FallingMotor : BaseMotor {
 	{
 		float xVel = 0f;
 		float zVel = 0f;
+		int xDir = -mover.kLeft + mover.kRight;
+		int zDir = -mover.kDown + mover.kUp;
 		//Move along x axis
-		if ((mover.aInput && mover.dInput) || (!mover.aInput && !mover.dInput)) {
-			xVel = 0;
-		} else if (mover.aInput) {
-			xVel = mover.moveSpeed;
-		} else {
-			xVel = -mover.moveSpeed;
-		}
+		xVel = xDir * mover.moveSpeed;
 
 		//Move along y axis
-		if ((mover.wInput && mover.sInput) || (!mover.wInput && !mover.sInput)) {
-			zVel = 0;
-		} else if (mover.wInput) {
-			zVel = mover.moveSpeed;
-		} else {
-			zVel = -mover.moveSpeed;
-		}
+		zVel = zDir * mover.moveSpeed;
 
 		mover.velocity = new Vector3 (zVel, mover.velocity.y, xVel);
         Vector3 gravity = new Vector3(0f, -.2f, 0f);

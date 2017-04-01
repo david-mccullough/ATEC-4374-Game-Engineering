@@ -23,11 +23,12 @@ public class CharacterMover : MonoBehaviour {
 	public BaseMotor fallingMotor;
 
 	public float moveSpeed;
-	public bool wInput;
-	public bool aInput;
-	public bool sInput;
-	public bool dInput;
-	public bool jInput;
+	public int kUp;
+	public int kDown;
+	public int kRight;
+	public int kLeft;
+	public int kpJump;
+	public int krJump;
 
 	private void Awake()
 	{
@@ -37,11 +38,12 @@ public class CharacterMover : MonoBehaviour {
 
 	void GetInput()
 	{
-		wInput = Input.GetKey ("w");
-		aInput = Input.GetKey ("a");
-		sInput = Input.GetKey ("s");
-		dInput = Input.GetKey ("d");
-		jInput = Input.GetKeyDown ("space");
+		kUp 	= Input.GetKey ("w") ? 1:0;
+		kLeft 	= Input.GetKey ("a") ? 1:0;
+		kRight 	= Input.GetKey ("d") ? 1:0;
+		kDown 	= Input.GetKey ("s") ? 1:0;
+		kpJump 	= Input.GetKeyDown ("space") ? 1:0;
+		krJump 	= Input.GetKeyUp ("space") ? 1:0;
 	}
 
 	private void Update()
