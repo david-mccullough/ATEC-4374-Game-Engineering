@@ -4,21 +4,19 @@ public class FallingMotor : BaseMotor {
 	
 	public override void UpdateMotor(CharacterMover mover)
 	{
-		float xVel = 0f;
-		float zVel = 0f;
-		int xDir = -mover.kLeft + mover.kRight;
-		int zDir = -mover.kDown + mover.kUp;
-		//Move along x axis
-		xVel = xDir * mover.moveSpeed;
+		mover.Move ();
 
-		//Move along y axis
-		zVel = zDir * mover.moveSpeed;
-
-		mover.velocity = new Vector3 (zVel, mover.velocity.y, xVel);
-        Vector3 gravity = new Vector3(0f, -.2f, 0f);
+		Vector3 gravity = new Vector3(0f, mover.gravity, 0f);
         mover.velocity += gravity * Time.deltaTime;
 
-		//mover.velocity += new Vector3 (mover.hInput * mover.moveSpeed, 0f, mover.vInput * mover.moveSpeed);
+		//variable height
+		if (mover.krJump != 0 && mover.velocity.y > 0)
+		{
+			float tempY = mover.velocity.y;
+			Vector3 tempVel = new Vector3 (mover.velocity.x, tempY * 0.25f, mover.velocity.z);
+			mover.velocity = tempVel;
+		}
+
 		mover.charController.Move (mover.velocity);
     }
 

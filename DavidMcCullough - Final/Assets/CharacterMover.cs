@@ -14,7 +14,16 @@ public class CharacterMover : MonoBehaviour {
     public float radius = .5f;
     public LayerMask collisionMask;
     public Vector3 velocity;
-	public float jumpSpeed = 1f;
+
+	public float moveSpeed = 0f;
+	public float maxSpeed = .1f;
+	public float acceleration = .01f;
+	public float deceleration = .02f;
+	public float jumpSpeed = 0.1f;
+	public float gravity = -0.2f;
+	float xVel = 0f;
+	float zVel = 0f;
+	float direction = 0f;
 
 	public MovementState currentState;
 
@@ -22,7 +31,6 @@ public class CharacterMover : MonoBehaviour {
 	public BaseMotor walkingMotor;
 	public BaseMotor fallingMotor;
 
-	public float moveSpeed;
 	public int kUp;
 	public int kDown;
 	public int kRight;
@@ -79,5 +87,39 @@ public class CharacterMover : MonoBehaviour {
 			fallingMotor.HandleCollision(this, hit);
 			break;
 		}
+	}
+
+	public void Move()
+	{
+		int xDir = -kLeft + kRight;
+		int zDir = -kDown + kUp;
+
+		Math math = new Math ();
+		if (xDir != 0 || zDir != 0) {
+			moveSpeed = math.Approach (moveSpeed, maxSpeed, acceleration*Time.deltaTime);
+		} else {
+			moveSpeed = math.Approach (moveSpeed, 0, deceleration*Time.deltaTime);
+		}
+
+		//find actual direction
+		//this will prevernt doubling the player's speed when moving along both axis
+		if (xDir != 0 || zDir != 0) {
+			float direction = Vector2.Angle (new Vector2 (1f, 0f), new Vector2 ((float)xDir, (float)zDir));
+			Debug.Log (direction);
+
+			//Move along x axis
+			xVel = -Mathf.Cos (Mathf.Deg2Rad * direction) * moveSpeed;
+			//Move along y axis
+			zVel = Mathf.Sin (Mathf.Deg2Rad * direction) * moveSpeed * Mathf.Sign (zDir);
+		} else {
+			//Move along x axis
+			xVel = 0f;
+			//Move along y axis
+			zVel = 0f;
+		}
+
+
+
+		velocity = new Vector3 (zVel, velocity.y, xVel);
 	}
 }

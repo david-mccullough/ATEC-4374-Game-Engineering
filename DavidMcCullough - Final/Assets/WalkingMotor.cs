@@ -3,30 +3,9 @@
 public class WalkingMotor : BaseMotor
 {
 	public override void UpdateMotor(CharacterMover mover)
-	{
-		float xVel = 0f;
-		float zVel = 0f;
-		int xDir = -mover.kLeft + mover.kRight;
-		int zDir = -mover.kDown + mover.kUp;
-
-		//find actual direction
-		//this will prevernt doubling the player's speed when moving along both axis
-		float direction = Vector2.Angle(new Vector2(1f, 0f), new Vector2((float)xDir, (float)zDir));
-		Debug.Log (direction);
-
-		//Move along x axis
-		if (xDir != 0) {
-			xVel = -Mathf.Cos (Mathf.Deg2Rad *direction) * mover.moveSpeed;
-			Debug.Log ("xVel: " + xVel);
-		}
-
-		//Move along y axis
-		if (zDir != 0) {
-			zVel = Mathf.Sin (Mathf.Deg2Rad *direction) * mover.moveSpeed*zDir;
-			Debug.Log ("zVel: " + zVel);
-		}
-			
-		mover.velocity = new Vector3 (zVel, mover.velocity.y, xVel);
+	{ 
+		//Movement move = new Movement();
+		mover.Move();
 
 		//jumping
 		if (mover.kpJump != 0)
