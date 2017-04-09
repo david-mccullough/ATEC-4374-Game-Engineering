@@ -119,6 +119,10 @@ public class CharacterMover : MonoBehaviour {
 		if(projVel + accelVel > max_velocity)
 			accelVel = max_velocity - projVel;
 
+		Vector3 newVel = prevVelocity + accelDir * accelVel;
+
+		gameObject.transform.LookAt(gameObject.transform.position + newVel, Vector3.up);
+			
 		return prevVelocity + accelDir * accelVel;
 	}
 
@@ -131,10 +135,10 @@ public class CharacterMover : MonoBehaviour {
 			dVelocity = velocity.y;
 		}
 		//+Mathf.Abs(dVelocity)
-		Debug.Log(dVelocity);
+		//Debug.Log(dVelocity);
 
 		RaycastHit rayHit;
-		if (Physics.SphereCast (transform.position, radius, Vector3.down, out rayHit, radius+Mathf.Abs(dVelocity), collisionMask)) {
+		if (Physics.SphereCast (transform.position, radius, Vector3.down, out rayHit, radius/4, collisionMask)) {
 			return true;
 		} else {
 			return false;

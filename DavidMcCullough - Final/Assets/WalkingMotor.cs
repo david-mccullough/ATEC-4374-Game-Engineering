@@ -4,23 +4,21 @@ public class WalkingMotor : BaseMotor
 {
 	public override void UpdateMotor(CharacterMover mover)
 	{ 
-		// Apply Friction
+		//apply Friction
 		float speed = mover.velocity.magnitude;
-		if (speed != 0) // To avoid divide by zero errors
+		if (speed != 0) //avoid dividing by zero
 		{
 			float drop = speed * mover.friction * Time.fixedDeltaTime;
-			mover.velocity *= Mathf.Max(speed - drop, 0) / speed; // Scale the velocity based on friction.
+			mover.velocity *= Mathf.Max(speed - drop, 0) / speed; //scale the velocity based on friction.
 		}
-
-		// ground_accelerate and max_velocity_ground are server-defined movement variables
+			
 		mover.velocity = mover.Accelerate(mover.accelDir, mover.velocity, mover.groundAccel, mover.maxGroundSpeed);
 
-		mover.velocity = new Vector3 (mover.velocity.x, 0f, mover.velocity.z);
+
 		//jumping
 		if (mover.kpJump)
 		{
-			float yVel = mover.jumpSpeed;
-			mover.velocity += new Vector3 (0f, yVel, 0f);
+			mover.velocity = new Vector3 (mover.velocity.x, mover.jumpSpeed, mover.velocity.z);
 		}
 		//variable height
 		if (mover.krJump && mover.velocity.y > 0)
@@ -31,6 +29,7 @@ public class WalkingMotor : BaseMotor
 		}
 
 		mover.charController.Move (mover.velocity);
+
 		//floor no longer beneath us, switch state
 		if (!mover.IsGrounded ()) {
 			mover.currentState = MovementState.falling;
