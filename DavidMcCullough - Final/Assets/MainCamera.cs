@@ -4,37 +4,48 @@ public class MainCamera : MonoBehaviour {
 
 	public GameObject target;
 	public Vector3 cameraOffset = new Vector3(0f, 10f, -20f);
-	public float speed = 2f;
+	public float speed = 5f;
 
-	private Camera camera;
+	private Camera cam;
+	private float cameraAngleX;
+	private float cameraAngleY;
+	private float targetAngleX;
+	private float targetAngleY;
 
 	// Use this for initialization
 	void Start () {
-		camera = GetComponent<Camera>();
-		
+		cam = GetComponent<Camera>();
+		targetAngleY = cam.transform.eulerAngles.y;
+		targetAngleX = cam.transform.eulerAngles.x;
 	}
 	
 	// Update is called once per frame
 	void LateUpdate ()
 	{
-		float xInput = Input.GetAxis("Mouse X");
-		float yInput = Input.GetAxis("Mouse Y");
-
-
 		//check for null ref
-		if (camera != null && target != null)
+		if (cam != null && target != null)
 		{
 			Vector3 targetPos = target.transform.position;
 			Vector3 offset = cameraOffset;
 
-			float cameraAngle = camera.transform.eulerAngles.y;
-			float targetAngle = target.transform.eulerAngles.y;
+			float xInput = Input.GetAxis("Mouse Y");
+			float yInput = Input.GetAxis("Mouse X");
 
-			targetAngle = Mathf.LerpAngle(cameraAngle, targetAngle, speed*Time.deltaTime);
-			offset = Quaternion.Euler(0f, targetAngle, 0f) * offset;
+			Debug.Log(xInput);
 
-			camera.transform.position = Vector3.Lerp(camera.transform.position, targetPos + offset, speed * Time.deltaTime);
-			camera.transform.LookAt(targetPos);
+
+			cameraAngleX = cam.transform.eulerAngles.x;
+			cameraAngleY = cam.transform.eulerAngles.y;
+			targetAngleX += (xInput*2) % 360;
+			targetAngleY += Mathf.Clamp((yInput*2) % 360, -15f, 60f);
+
+			targetAngleY = Mathf.LerpAngle(cameraAngleY, targetAngleY, 1f);
+			targetAngleX = Mathf.LerpAngle(cameraAngleX, targetAngleX, 1f);
+			offset = Quaternion.Euler(0f, targetAngleY, 0f) * offset;
+
+
+			cam.transform.position = Vector3.Lerp(cam.transform.position, targetPos + offset, speed * Time.deltaTime);
+			cam.transform.LookAt(targetPos);
 		}
 	}
 }

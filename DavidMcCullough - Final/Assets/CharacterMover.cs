@@ -13,6 +13,7 @@ public class CharacterMover : MonoBehaviour {
 	public CharacterController charController;
     public float radius = .5f;
     public LayerMask collisionMask;
+	public MainCamera camera;
 
 	//movement vars
     public Vector3 velocity;
@@ -42,6 +43,7 @@ public class CharacterMover : MonoBehaviour {
 	public bool kLeft;
 	public bool kpJump;
 	public bool krJump;
+
 
 	private void Awake()
 	{
@@ -99,15 +101,22 @@ public class CharacterMover : MonoBehaviour {
 	//this frame based on input
 	private void SetAccelDir()
 	{
-		accelDir = Vector3.zero;
-		if (kLeft)
-			accelDir += Vector3.left;
-		if (kRight)
-			accelDir += Vector3.right;
-		if (kUp)
-			accelDir += Vector3.forward;
-		if (kDown)
-			accelDir += Vector3.back;
+		//float camAngle = Mathf.Deg2Rad*camera.GetCameraAngle();
+		//Vector3 left, right, forward, back;
+
+		//Vector3 relativeDir = new Vector3((Mathf.Cos(camAngle)), 0f, (Mathf.Sin(camAngle)));
+		//Debug.Log(Mathf.Cos(camAngle));
+
+		Transform camTransform = camera.transform;
+		Vector3 camForward = camTransform.TransformDirection(Vector3.forward);
+		camForward.y = 0f;
+		camForward = camForward.normalized;
+		Vector3 camRight = new Vector3(camForward.z, 0f, -camForward.x);
+
+		float v = Input.GetAxisRaw("Vertical");
+		float h = Input.GetAxisRaw("Horizontal");
+
+		accelDir = h * camRight + v * camForward;
 	}
 
 	public Vector3 Accelerate(Vector3 accelDir, Vector3 prevVelocity, float accelerate, float max_velocity)
@@ -121,7 +130,8 @@ public class CharacterMover : MonoBehaviour {
 
 		Vector3 newVel = prevVelocity + accelDir * accelVel;
 
-		gameObject.transform.LookAt(gameObject.transform.position + newVel, Vector3.up);
+		Vector3 tempVel = new Vector3(newVel.x, 0f, newVel.z);
+		gameObject.transform.LookAt(gameObject.transform.position + tempVel, Vector3.up);
 			
 		return prevVelocity + accelDir * accelVel;
 	}
