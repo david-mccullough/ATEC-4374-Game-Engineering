@@ -4,7 +4,7 @@ public class FallingMotor : BaseMotor {
 	
 	public override void UpdateMotor(CharacterMover mover)
 	{
-		mover.Accelerate(mover.accelDir, mover.velocity, mover.airAccel, mover.maxAirSpeed);
+		mover.velocity = mover.Accelerate(mover.accelDir, mover.velocity, mover.airAccel, mover.maxAirSpeed);
 
 		Vector3 gravity = new Vector3(0f, mover.gravity, 0f);
         mover.velocity += gravity * Time.deltaTime;
@@ -18,15 +18,21 @@ public class FallingMotor : BaseMotor {
 		}
 
 		mover.charController.Move (mover.velocity);
-    }
-
-	public override void HandleCollision(CharacterMover mover, ControllerColliderHit hit)
-	{
 		if (mover.IsGrounded())
 		{
 			mover.velocity = new Vector3 (mover.velocity.x, 0f, mover.velocity.z);
 			mover.currentState = MovementState.walking;
 			Debug.Log ("Switch to walking");
 		}
+    }
+
+	public override void HandleCollision(CharacterMover mover, ControllerColliderHit hit)
+	{
+	/*	if (mover.IsGrounded())
+		{
+			mover.velocity = new Vector3 (mover.velocity.x, 0f, mover.velocity.z);
+			mover.currentState = MovementState.walking;
+			Debug.Log ("Switch to walking");
+		}*/
     }
 }

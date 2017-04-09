@@ -13,8 +13,9 @@ public class WalkingMotor : BaseMotor
 		}
 
 		// ground_accelerate and max_velocity_ground are server-defined movement variables
-		mover.Accelerate(mover.accelDir, mover.velocity, mover.groundAccel, mover.maxGroundSpeed);
+		mover.velocity = mover.Accelerate(mover.accelDir, mover.velocity, mover.groundAccel, mover.maxGroundSpeed);
 
+		mover.velocity = new Vector3 (mover.velocity.x, 0f, mover.velocity.z);
 		//jumping
 		if (mover.kpJump)
 		{
@@ -29,16 +30,21 @@ public class WalkingMotor : BaseMotor
 			mover.velocity = tempVel;
 		}
 
-		mover.charController.Move (mover.velocity);			
+		mover.charController.Move (mover.velocity);
+		//floor no longer beneath us, switch state
+		if (!mover.IsGrounded ()) {
+			mover.currentState = MovementState.falling;
+			Debug.Log ("Switch to falling");
+		}
 
 	}
 		
 	public override void HandleCollision(CharacterMover mover, ControllerColliderHit hit)
 	{
 		//floor no longer beneath us, switch state
-		if (mover.IsGrounded ()) {
+		/*if (!mover.IsGrounded ()) {
 			mover.currentState = MovementState.falling;
 			Debug.Log ("Switch to falling");
-		}
+		}*/
 	}
 }

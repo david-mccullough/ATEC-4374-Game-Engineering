@@ -18,12 +18,12 @@ public class CharacterMover : MonoBehaviour {
     public Vector3 velocity;
 	public Vector3 accelDir;
 
-	public float maxGroundSpeed = .1f;
-	public float maxAirSpeed = .2f;
+	public float maxGroundSpeed = .2f;
+	public float maxAirSpeed = .3f;
 
-	public float groundAccel = .01f;
-	public float airAccel = .01f;
-	public float friction = .02f;
+	public float groundAccel = .1f;
+	public float airAccel = .075f;
+	public float friction = .1f;
 
 	public float jumpSpeed = 0.1f;
 	public float gravity = -0.2f;
@@ -102,7 +102,7 @@ public class CharacterMover : MonoBehaviour {
 		accelDir = Vector3.zero;
 		if (kLeft)
 			accelDir += Vector3.left;
-		if (kLeft)
+		if (kRight)
 			accelDir += Vector3.right;
 		if (kUp)
 			accelDir += Vector3.forward;
@@ -130,9 +130,11 @@ public class CharacterMover : MonoBehaviour {
 		{
 			dVelocity = velocity.y;
 		}
+		//+Mathf.Abs(dVelocity)
+		Debug.Log(dVelocity);
 
 		RaycastHit rayHit;
-		if (Physics.SphereCast (transform.position, radius, Vector3.down, out rayHit, dVelocity, collisionMask)) {
+		if (Physics.SphereCast (transform.position, radius, Vector3.down, out rayHit, radius+Mathf.Abs(dVelocity), collisionMask)) {
 			return true;
 		} else {
 			return false;
