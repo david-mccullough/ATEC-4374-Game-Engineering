@@ -3,7 +3,7 @@
 public class MainCamera : MonoBehaviour {
 
 	public GameObject target;
-	public Vector3 cameraOffset = new Vector3(0f, 10f, -20f);
+	public Vector3 cameraOffset = new Vector3(0f, 4, -2f);
 	public float speed = 5f;
 
 	private Camera cam;
@@ -12,11 +12,16 @@ public class MainCamera : MonoBehaviour {
 	private float targetAngleX;
 	private float targetAngleY;
 
+	private float minDistance = 1f;
+	private float maxDistance;
+
 	// Use this for initialization
 	void Start () {
 		cam = GetComponent<Camera>();
 		targetAngleY = cam.transform.eulerAngles.y;
 		targetAngleX = cam.transform.eulerAngles.x;
+
+		maxDistance = cameraOffset.magnitude;
 	}
 	
 	// Update is called once per frame
@@ -31,19 +36,25 @@ public class MainCamera : MonoBehaviour {
 			float xInput = Input.GetAxis("Mouse Y");
 			float yInput = Input.GetAxis("Mouse X");
 
-			Debug.Log(xInput);
-
-
 			cameraAngleX = cam.transform.eulerAngles.x;
 			cameraAngleY = cam.transform.eulerAngles.y;
 			targetAngleX += (xInput*2) % 360;
-			targetAngleY += Mathf.Clamp((yInput*2) % 360, -15f, 60f);
+			targetAngleY += (yInput*2) % 360;
+			targetAngleY = Mathf.Clamp(targetAngleY, 0f, 60f);
 
 			targetAngleY = Mathf.LerpAngle(cameraAngleY, targetAngleY, 1f);
 			targetAngleX = Mathf.LerpAngle(cameraAngleX, targetAngleX, 1f);
-			offset = Quaternion.Euler(0f, targetAngleY, 0f) * offset;
+			offset = Quaternion.Euler(targetAngleX, targetAngleY, 0f) * offset;
 
-
+			//check if camera should collide with wall
+			float distance = cameraOffset.magnitude;
+			RaycastHit rayHit;
+			if (Physics.Linecast (transform.position, offset, out rayHit)) 
+			{
+				distance = rayHit.distance;//Mathf.Clamp(rayHit.distance, minDistance, maxDistance); 
+			}
+			Debug.DrawLine(transform.position, targetPos,Color.cyan,Time.deltaTime,false);
+			//offset *= distance/cameraOffset.magnitude;
 			cam.transform.position = Vector3.Lerp(cam.transform.position, targetPos + offset, speed * Time.deltaTime);
 			cam.transform.LookAt(targetPos);
 		}
