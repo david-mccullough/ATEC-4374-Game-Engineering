@@ -38,9 +38,9 @@ public class MainCamera : MonoBehaviour {
 
 			cameraAngleX = cam.transform.eulerAngles.x;
 			cameraAngleY = cam.transform.eulerAngles.y;
-			targetAngleX += (xInput*2) % 360;
+			targetAngleX -= (xInput*2) % 360;
 			targetAngleY += (yInput*2) % 360;
-			targetAngleY = Mathf.Clamp(targetAngleY, 0f, 60f);
+			targetAngleX = Mathf.Clamp(targetAngleX,-50f, 30);
 
 			targetAngleY = Mathf.LerpAngle(cameraAngleY, targetAngleY, 1f);
 			targetAngleX = Mathf.LerpAngle(cameraAngleX, targetAngleX, 1f);
