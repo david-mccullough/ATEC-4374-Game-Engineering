@@ -19,14 +19,9 @@ public class WalkingMotor : BaseMotor
 		if (mover.kpJump)
 		{
 			mover.velocity = new Vector3 (mover.velocity.x, mover.jumpSpeed, mover.velocity.z);
+			mover.gravity= new Vector3(0f, -0.3f, 0f);
 		}
-		//variable height
-		if (mover.krJump && mover.velocity.y > 0)
-		{
-			float tempY = mover.velocity.y;
-			Vector3 tempVel = new Vector3 (mover.velocity.x, tempY * 0.25f, mover.velocity.z);
-			mover.velocity = tempVel;
-		}
+
 
 		mover.charController.Move (mover.velocity);
 

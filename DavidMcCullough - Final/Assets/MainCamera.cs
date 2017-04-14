@@ -15,6 +15,7 @@ public class MainCamera : MonoBehaviour {
 	private float minDistance = 1f;
 	private float maxDistance;
 
+
 	// Use this for initialization
 	void Start () {
 		cam = GetComponent<Camera>();
@@ -30,6 +31,8 @@ public class MainCamera : MonoBehaviour {
 		//check for null ref
 		if (cam != null && target != null)
 		{
+			Color debugColor = Color.cyan;
+
 			Vector3 targetPos = target.transform.position;
 			Vector3 offset = cameraOffset;
 
@@ -49,13 +52,17 @@ public class MainCamera : MonoBehaviour {
 			//check if camera should collide with wall
 			float distance = cameraOffset.magnitude;
 			RaycastHit rayHit;
-			if (Physics.Linecast (transform.position, offset, out rayHit)) 
+			if (Physics.SphereCast (target.transform.position, 0.3f, offset.normalized, out rayHit, offset.magnitude)) 
 			{
-				distance = rayHit.distance;//Mathf.Clamp(rayHit.distance, minDistance, maxDistance); 
+				if (rayHit.collider.transform.tag != "Player")
+				{
+					distance = Mathf.Clamp(rayHit.distance, minDistance, maxDistance); 
+					debugColor = Color.red;
+				}
 			}
-			Debug.DrawLine(transform.position, targetPos,Color.cyan,Time.deltaTime,false);
-			//offset *= distance/cameraOffset.magnitude;
-			cam.transform.position = Vector3.Lerp(cam.transform.position, targetPos + offset, speed * Time.deltaTime);
+			Debug.DrawLine(transform.position, targetPos,debugColor,Time.deltaTime,false);
+			offset = offset.normalized * distance;
+			cam.transform.position = targetPos + offset;
 			cam.transform.LookAt(targetPos);
 		}
 	}

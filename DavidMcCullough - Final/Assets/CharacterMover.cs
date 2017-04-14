@@ -27,7 +27,8 @@ public class CharacterMover : MonoBehaviour {
 	public float friction = .1f;
 
 	public float jumpSpeed = 0.1f;
-	public float gravity = -0.2f;
+	public float wallJumpSpeed = .13f;
+	public Vector3 gravity = new Vector3(0f, -0.4f, 0f);
 
 	//states
 	public MovementState currentState;
