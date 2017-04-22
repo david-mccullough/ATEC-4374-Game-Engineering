@@ -4,7 +4,8 @@ public enum MovementState
 {
 	start,
 	walking,
-	falling
+	falling,
+	swimming
 }
 
 [RequireComponent(typeof(CharacterController))]
@@ -40,6 +41,7 @@ public class CharacterMover : MonoBehaviour {
 	public BaseMotor startMotor;
 	public BaseMotor walkingMotor;
 	public BaseMotor fallingMotor;
+	public BaseMotor swimmingMotor;
 
 	//input bools
 	public bool kUp;
@@ -70,6 +72,10 @@ public class CharacterMover : MonoBehaviour {
 				break;
 
 			case MovementState.falling:
+				fallingMotor.UpdateMotor(this);
+				break;
+
+			case MovementState.swimming:
 				fallingMotor.UpdateMotor(this);
 				break;
 		}

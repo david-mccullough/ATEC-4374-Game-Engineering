@@ -4,6 +4,7 @@ public class FallingMotor : BaseMotor {
 	
 	public override void UpdateMotor(CharacterMover mover)
 	{
+
 		mover.velocity = mover.Accelerate(mover.accelDir, mover.velocity, mover.airAccel, mover.maxAirSpeed);
 
 		//variable height
@@ -47,6 +48,14 @@ public class FallingMotor : BaseMotor {
 			mover.gravity= new Vector3(0f, mover.gSpeed, 0f);
 
 		}
-
     }
+
+	void OnTriggerEnter(Collider other)
+	{
+		if (other.tag == "Water")
+		{
+			this.gameObject.GetComponent<CharacterMover>().currentState = MovementState.swimming;
+			Debug.Log ("Switch to swimming");
+		}
+	}
 }
