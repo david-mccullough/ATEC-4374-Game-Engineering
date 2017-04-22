@@ -28,7 +28,11 @@ public class CharacterMover : MonoBehaviour {
 
 	public float jumpSpeed = 0.1f;
 	public float wallJumpSpeed = .13f;
-	public Vector3 gravity = new Vector3(0f, -0.4f, 0f);
+	public bool wallSlide = false;
+
+	public float gSpeed = -0.2f;
+	public float gSpeedVariable = -0.4f;
+	public Vector3 gravity = new Vector3(0f, -0.2f, 0f);
 
 	//states
 	public MovementState currentState;
@@ -69,6 +73,7 @@ public class CharacterMover : MonoBehaviour {
 				fallingMotor.UpdateMotor(this);
 				break;
 		}
+		charController.Move (velocity);
 	}
 
 	void OnControllerColliderHit(ControllerColliderHit hit)
@@ -149,7 +154,7 @@ public class CharacterMover : MonoBehaviour {
 		//Debug.Log(dVelocity);
 
 		RaycastHit rayHit;
-		if (Physics.SphereCast (transform.position, radius, Vector3.down, out rayHit, radius/4, collisionMask)) {
+		if (Physics.SphereCast (transform.position, radius, Vector3.down, out rayHit, radius/4f, collisionMask)) {
 			return true;
 		} else {
 			return false;

@@ -14,6 +14,7 @@ public class MainCamera : MonoBehaviour {
 
 	private float minDistance = 1f;
 	private float maxDistance;
+	private float distance;
 
 
 	// Use this for initialization
@@ -23,6 +24,7 @@ public class MainCamera : MonoBehaviour {
 		targetAngleX = cam.transform.eulerAngles.x;
 
 		maxDistance = cameraOffset.magnitude;
+		distance = maxDistance;
 	}
 	
 	// Update is called once per frame
@@ -50,17 +52,25 @@ public class MainCamera : MonoBehaviour {
 			offset = Quaternion.Euler(targetAngleX, targetAngleY, 0f) * offset;
 
 			//check if camera should collide with wall
-			float distance = cameraOffset.magnitude;
+			float distance_ = cameraOffset.magnitude;
 			RaycastHit rayHit;
-			if (Physics.SphereCast (target.transform.position, 0.3f, offset.normalized, out rayHit, offset.magnitude)) 
+			if (Physics.SphereCast (target.transform.position, 0.5f, offset.normalized, out rayHit, offset.magnitude)) 
 			{
-				if (rayHit.collider.transform.tag != "Player")
+				if (rayHit.collider.transform.tag == "Wall")
 				{
-					distance = Mathf.Clamp(rayHit.distance, minDistance, maxDistance); 
+					distance_ = Mathf.Clamp(rayHit.distance, minDistance, maxDistance);
 					debugColor = Color.red;
 				}
 			}
 			Debug.DrawLine(transform.position, targetPos,debugColor,Time.deltaTime,false);
+
+			if (distance >= distance_) {
+				distance = distance_;
+			} else {
+				//Smooth camera distance movement if returning to normal distance
+				distance = Mathf.Lerp(distance, distance_, 1f*Time.deltaTime);
+			}
+
 			offset = offset.normalized * distance;
 			cam.transform.position = targetPos + offset;
 			cam.transform.LookAt(targetPos);
