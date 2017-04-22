@@ -33,7 +33,7 @@ public class WalkingMotor : BaseMotor
 		//placeholder
 	}
 
-	void OnTriggerEnter(Collider other)
+	void OnTriggerStay(Collider other)
 	{
 		if (other.tag == "Water")
 		{

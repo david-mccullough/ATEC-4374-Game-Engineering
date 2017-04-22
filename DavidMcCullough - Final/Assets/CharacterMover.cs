@@ -48,6 +48,7 @@ public class CharacterMover : MonoBehaviour {
 	public bool kDown;
 	public bool kRight;
 	public bool kLeft;
+	public bool kJump;
 	public bool kpJump;
 	public bool krJump;
 
@@ -76,7 +77,7 @@ public class CharacterMover : MonoBehaviour {
 				break;
 
 			case MovementState.swimming:
-				fallingMotor.UpdateMotor(this);
+				swimmingMotor.UpdateMotor(this);
 				break;
 		}
 		charController.Move (velocity);
@@ -96,6 +97,10 @@ public class CharacterMover : MonoBehaviour {
 		case MovementState.falling:
 			fallingMotor.HandleCollision(this, hit);
 			break;
+
+		case MovementState.swimming:
+			swimmingMotor.HandleCollision(this, hit);
+			break;
 		}
 	}
 
@@ -107,6 +112,7 @@ public class CharacterMover : MonoBehaviour {
 		kDown 	= Input.GetKey ("s");
 		kpJump 	= Input.GetKeyDown ("space");
 		krJump 	= Input.GetKeyUp ("space");
+		kJump 	= Input.GetKey ("space");
 	}
 
 	//determines where we will direct our acceleration 

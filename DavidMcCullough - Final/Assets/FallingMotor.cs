@@ -4,9 +4,6 @@ public class FallingMotor : BaseMotor {
 	
 	public override void UpdateMotor(CharacterMover mover)
 	{
-
-		mover.velocity = mover.Accelerate(mover.accelDir, mover.velocity, mover.airAccel, mover.maxAirSpeed);
-
 		//variable height
 		if (mover.krJump && mover.velocity.y > 0f)
 		{
@@ -21,6 +18,8 @@ public class FallingMotor : BaseMotor {
 		}
 		mover.velocity += mover.gravity * Time.deltaTime;
 		mover.wallSlide = false;
+
+		mover.velocity = mover.Accelerate(mover.accelDir, mover.velocity, mover.airAccel, mover.maxAirSpeed);
 
 		//mover.charController.Move (mover.velocity);
 		if (mover.IsGrounded())
@@ -50,7 +49,7 @@ public class FallingMotor : BaseMotor {
 		}
     }
 
-	void OnTriggerEnter(Collider other)
+	void OnTriggerStay(Collider other)
 	{
 		if (other.tag == "Water")
 		{
