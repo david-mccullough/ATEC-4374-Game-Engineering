@@ -179,8 +179,9 @@ public class CharacterMover : MonoBehaviour {
 		if (other.transform.tag == "Pickup")
 		{
 			Pickup pickup = other.GetComponent<Pickup>();
-			manager.Collect(pickup.type);
-			//feedback here
+			if (!pickup.picked)
+				manager.Collect(pickup.type);
+
 			switch (pickup.type)
 			{
 			case PickupType.coin:
@@ -189,7 +190,7 @@ public class CharacterMover : MonoBehaviour {
 				break;
 
 			case PickupType.gem:
-				Destroy(pickup.gameObject);
+				pickup.picked = true;
 				break;
 
 			case PickupType.xp:
@@ -197,12 +198,15 @@ public class CharacterMover : MonoBehaviour {
 				break;
 
 			case PickupType.xpCase:
+				//spawn a bunch of xp orbs
 				int i = (int) Mathf.Round(Random.Range(4f,6f));
-				while (false)
+				while (i > 0)
 				{
-					Instantiate(pickup.xpObject, transform.position, transform.rotation).GetComponent<Pickup>();
+					Instantiate(pickup.xpObject, pickup.transform.position, pickup.transform.rotation).GetComponent<Pickup>();
+					i--;
+
 				}
-				Destroy(this.gameObject);
+				Destroy(pickup.gameObject);
 				break;
 			}
 		}

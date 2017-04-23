@@ -11,9 +11,9 @@ public class FallingMotor : BaseMotor {
 		}
 		if (mover.velocity.y <= 0f)
 		{
-			if (mover.wallSlide)
-				mover.gravity= new Vector3(0f, mover.gSpeed/4, 0f);
-			else
+			//if (mover.wallSlide)
+			//	mover.gravity= new Vector3(0f, mover.gSpeed/5, 0f);
+			//else
 				mover.gravity= new Vector3(0f, mover.gSpeed, 0f);
 		}
 		mover.velocity += mover.gravity * Time.deltaTime;

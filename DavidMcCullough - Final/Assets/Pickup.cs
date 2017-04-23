@@ -16,13 +16,21 @@ public class Pickup : MonoBehaviour {
 	public GameManager manager;
 	public GameObject xpObject;
 	private Transform player;
+
+	public float spinSpeed = 180f;
+	public bool picked = false;
 	private float speed = .01f;
 
 	// Use this for initialization
 	void Start () {
 		player = GameObject.Find("Player").GetComponent<Transform>();
 		if (type == PickupType.xp)
-			velocity = new Vector3(Random.Range(-1f,1f),Random.Range(0f,1f),Random.Range(-1f,1f));
+		{
+			velocity = new Vector3(Random.Range(-.02f,.02f),0f,Random.Range(-.02f,.02f));
+			transform.position += velocity.normalized*2;
+			velocity += new Vector3(0f, Random.Range(0f,.02f), 0f);
+		}
+		
 	}
 
 	// Update is called once per frame
@@ -31,9 +39,19 @@ public class Pickup : MonoBehaviour {
 		{
 			FloatToward(player);
 		}
+		else if (type == PickupType.gem && picked)
+		{
+			FloatToward(manager.transform);
+			spinSpeed+= 30*Time.deltaTime;
+			transform.Rotate(spinSpeed*Vector3.forward * Time.deltaTime);
+			if (Vector3.Distance(transform.position, manager.transform.position) < 1f)
+			{
+				Destroy(this.gameObject);
+			}
+		}
 		else
 		{
-			transform.Rotate(180*Vector3.forward * Time.deltaTime);
+			transform.Rotate(spinSpeed*Vector3.forward * Time.deltaTime);
 		}
 		transform.position += velocity;
 	}
@@ -74,24 +92,10 @@ public class Pickup : MonoBehaviour {
 
 	private void FloatToward(Transform t)
 	{
-		speed = Mathf.Clamp(speed*1.02f, 0f, .75f);
+		speed = Mathf.Clamp(speed*1.06f, 0f, .75f);
 
 		Vector3 target = t.position;
 		transform.position = Vector3.MoveTowards(transform.position, target, speed);
-		/*Vector3 accelDir = t.position - transform.position;
-		float projVel = Vector3.Dot(velocity, accelDir); // Vector projection of Current velocity onto accelDir.
-		float accelVel = .05f * Time.deltaTime; // Accelerated velocity in direction of movment
-
-		// If necessary, truncate the accelerated velocity so the vector projection does not exceed max_velocity
-		if(projVel + accelVel > .5f)
-			accelVel =.5f - projVel;
-
-		Vector3 newVel = velocity + accelDir * accelVel;
-
-		Vector3 tempVel = new Vector3(newVel.x, 0f, newVel.z);
-		gameObject.transform.LookAt(gameObject.transform.position, Vector3.up);
-
-		velocity = velocity + accelDir * accelVel;*/
 	}
 
 }
