@@ -12,6 +12,7 @@ public enum MovementState
 public class CharacterMover : MonoBehaviour {
 
 	public CharacterController charController;
+	public GameManager manager;
     public float radius = .5f;
     public LayerMask collisionMask;
 	public MainCamera camera;
@@ -170,6 +171,40 @@ public class CharacterMover : MonoBehaviour {
 			return true;
 		} else {
 			return false;
+		}
+	}
+
+	void OnTriggerEnter(Collider other)
+	{
+		if (other.transform.tag == "Pickup")
+		{
+			Pickup pickup = other.GetComponent<Pickup>();
+			manager.Collect(pickup.type);
+			//feedback here
+			switch (pickup.type)
+			{
+			case PickupType.coin:
+
+				Destroy(pickup.gameObject);
+				break;
+
+			case PickupType.gem:
+				Destroy(pickup.gameObject);
+				break;
+
+			case PickupType.xp:
+				Destroy(pickup.gameObject);
+				break;
+
+			case PickupType.xpCase:
+				int i = (int) Mathf.Round(Random.Range(4f,6f));
+				while (false)
+				{
+					Instantiate(pickup.xpObject, transform.position, transform.rotation).GetComponent<Pickup>();
+				}
+				Destroy(this.gameObject);
+				break;
+			}
 		}
 	}
 }

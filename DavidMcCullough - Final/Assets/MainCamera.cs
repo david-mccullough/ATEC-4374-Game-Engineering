@@ -68,7 +68,7 @@ public class MainCamera : MonoBehaviour {
 				distance = distance_;
 			} else {
 				//Smooth camera distance movement if returning to normal distance
-				distance = Mathf.Lerp(distance, distance_, 1f*Time.deltaTime);
+				distance = Mathf.Lerp(distance, distance_, 1.25f*Time.deltaTime);
 			}
 
 			offset = offset.normalized * distance;
