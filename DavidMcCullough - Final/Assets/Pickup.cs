@@ -36,10 +36,13 @@ public class Pickup : MonoBehaviour {
 
 	// Update is called once per frame
 	void Update () {
+
+		// xp orbs float toward player
 		if (type == PickupType.xp)
 		{
 			FloatToward(player);
 		}
+		// gems shoot into the sky
 		else if (type == PickupType.gem && picked)
 		{
 			FloatToward(manager.transform);
@@ -59,6 +62,7 @@ public class Pickup : MonoBehaviour {
 		
 	private void FloatToward(Transform t)
 	{
+		//accelerate speed
 		speed = Mathf.Clamp(speed*1.06f, 0f, .75f);
 
 		Vector3 target = t.position;

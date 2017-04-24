@@ -41,7 +41,7 @@ public class SwimmingMotor : BaseMotor
 		if (other.tag == "Water")
 		{
 			this.gameObject.GetComponent<CharacterMover>().currentState = MovementState.walking;
-			Debug.Log ("Switch to falling");
+			Debug.Log ("Switch to walking");
 		}
 	}
 }

@@ -24,7 +24,7 @@ public class GameManager : MonoBehaviour {
 
 	public void Collect(PickupType type)
 	{
-		//feedback here
+		// increment respective collectables
 		switch (type)
 		{
 		case PickupType.coin:
@@ -56,6 +56,7 @@ public class GameManager : MonoBehaviour {
 
 	public void LevelUp()
 	{
+		// increment xp, if we reach the level up capacity reset the count and increment level
 		xpLevel++;
 		xpCount = 0;
 		levelUpThreshold = levelUpThreshold + levelUpThreshold/3;
