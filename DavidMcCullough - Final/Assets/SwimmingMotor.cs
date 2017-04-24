@@ -17,11 +17,17 @@ public class SwimmingMotor : BaseMotor
 
 		mover.velocity = mover.Accelerate(mover.accelDir, mover.velocity, mover.groundAccel, mover.maxGroundSpeed);
 
+		//jumping
+		if (mover.kpJump)
+		{
+			mover.velocity += new Vector3 (0f, mover.jumpSpeed, 0f);
+		}
 		//float upwards
 		if (mover.kJump)
 		{
 			mover.velocity += mover.gravity * -.6f * Time.deltaTime;
 		}
+
 			
 	}
 

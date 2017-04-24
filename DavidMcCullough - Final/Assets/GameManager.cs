@@ -20,6 +20,7 @@ public class GameManager : MonoBehaviour {
 	public Text uiXPLevel;
 	public Text uiCoins;
 	public Text uiGems;
+	public Text uiWinText;
 
 	public void Collect(PickupType type)
 	{
@@ -33,7 +34,9 @@ public class GameManager : MonoBehaviour {
 
 		case PickupType.gem:
 			gemCount++;
-			uiGems.text = "Gems: " + gemCount + "/8";
+			uiGems.text = "Gems: " + gemCount + "/5";
+			if (gemCount>=5)
+				uiWinText.enabled = true;
 		break;
 
 		case PickupType.xp:
@@ -56,6 +59,7 @@ public class GameManager : MonoBehaviour {
 		xpLevel++;
 		xpCount = 0;
 		levelUpThreshold = levelUpThreshold + levelUpThreshold/3;
+		uiXPBar.value = ((float) xpCount)/((float)levelUpThreshold);
 		GameObject player = GameObject.Find("Player");
 		Instantiate(sndLevelUp, player.transform.position, player.transform.rotation);
 
