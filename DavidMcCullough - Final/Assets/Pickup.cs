@@ -15,6 +15,7 @@ public class Pickup : MonoBehaviour {
 
 	public GameManager manager;
 	public GameObject xpObject;
+	public GameObject sparkle;
 	private Transform player;
 
 	public float spinSpeed = 180f;
@@ -42,7 +43,7 @@ public class Pickup : MonoBehaviour {
 		else if (type == PickupType.gem && picked)
 		{
 			FloatToward(manager.transform);
-			spinSpeed+= 30*Time.deltaTime;
+			spinSpeed+= 60*Time.deltaTime;
 			transform.Rotate(spinSpeed*Vector3.forward * Time.deltaTime);
 			if (Vector3.Distance(transform.position, manager.transform.position) < 1f)
 			{
@@ -55,41 +56,7 @@ public class Pickup : MonoBehaviour {
 		}
 		transform.position += velocity;
 	}
-
-	/*void OnCollisionEnter(Collision hit)
-	{
-		if (hit.transform.tag == "Player")
-		{
-			manager.Collect(type);
-			//feedback here
-			switch (type)
-			{
-				case PickupType.coin:
-					
-					Destroy(this.gameObject);
-				break;
-
-				case PickupType.gem:
-					Destroy(this.gameObject);
-				break;
-
-				case PickupType.xp:
-					Destroy(this.gameObject);
-				break;
-
-				case PickupType.xpCase:
-					int i = (int) Mathf.Round(Random.Range(4f,6f));
-					while (i > 0)
-					{
-						Pickup orb = Instantiate(xpObject, transform.position, transform.rotation).GetComponent<Pickup>();
-						orb.velocity = new Vector3(Random.Range(-1f,1f),Random.Range(0f,1f),Random.Range(-1f,1f));
-					}
-					Destroy(this.gameObject);
-				break;
-			}
-		}
-	}*/
-
+		
 	private void FloatToward(Transform t)
 	{
 		speed = Mathf.Clamp(speed*1.06f, 0f, .75f);

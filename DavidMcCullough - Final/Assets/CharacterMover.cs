@@ -185,29 +185,35 @@ public class CharacterMover : MonoBehaviour {
 			switch (pickup.type)
 			{
 			case PickupType.coin:
-
+				Instantiate(manager.sndCoin, pickup.transform.position, pickup.transform.rotation);
+				Instantiate(pickup.sparkle, pickup.transform.position, pickup.transform.rotation);
 				Destroy(pickup.gameObject);
-				break;
+			break;
 
 			case PickupType.gem:
+				Instantiate(manager.sndGem, pickup.transform.position, pickup.transform.rotation);
 				pickup.picked = true;
-				break;
+				Renderer rend = pickup.GetComponent<Renderer>();
+				rend.material.color = Color.white;
+			break;
 
 			case PickupType.xp:
+				Instantiate(manager.sndXP, pickup.transform.position, pickup.transform.rotation);
 				Destroy(pickup.gameObject);
-				break;
+			break;
 
 			case PickupType.xpCase:
+				Instantiate(manager.sndXPCase, pickup.transform.position, pickup.transform.rotation);
 				//spawn a bunch of xp orbs
 				int i = (int) Mathf.Round(Random.Range(4f,6f));
 				while (i > 0)
 				{
-					Instantiate(pickup.xpObject, pickup.transform.position, pickup.transform.rotation).GetComponent<Pickup>();
+					Instantiate(pickup.xpObject, pickup.transform.position, pickup.transform.rotation);
 					i--;
 
 				}
 				Destroy(pickup.gameObject);
-				break;
+			break;
 			}
 		}
 	}
